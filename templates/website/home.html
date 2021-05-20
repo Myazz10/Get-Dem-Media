@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% load website_tags %}
+{% load static %}
+
+{% animated_header_text as animated_text %}
+
+{% block content %}
+    <!-- Header with Search Form -->
+    <header class="masthead text-white text-center" style="background: url({% static 'website/assets/img/pexels-garrett-morrow-1649771.jpg' %});background-size: cover;">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 mx-auto">
+                    <div class="text-nowrap d-flex justify-content-center align-items-center animated-text noSelect" style="background: rgba(255,255,255,0);border-style: none;margin-top: 0px;width: 50%;margin-right: auto;margin-left: auto;">
+                        <div class="caption v-middle text-center">
+                            <h1 class="cd-headline clip">
+                                <span class="blc">Get</span>
+                                <span class="cd-words-wrapper">
+                                    {% if animated_text %}
+                                        <b class="is-visible">{{ animated_text.0 }}</b>
+                                        <b>{{ animated_text.1 }}</b>
+                                        {% if animated_text.2 %}
+                                            <b>{{ animated_text.2 }}</b>
+                                        {% endif %}
+                                        <b>{{ animated_text.3 }}</b>
+                                    {% else %}
+                                        <b class="is-visible">First Paragraph</b>
+                                        <b>Second Paragraph</b>
+                                        <b>Third Paragraph</b>
+                                        <b>Fourth Paragraph</b>
+                                    {% endif %}
+                                </span>
+                                <span class="blinking">|</span>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-12 col-md-9 col-xl-12 offset-xl-0 mb-2 mb-md-0">
+                                <form class="text-center align-items-center align-content-center align-self-center bootstrap-form-with-validation" method="post">
+                                    {% if success_comment %}
+                                        <h2>{{ success_comment }}</h2>
+                                        <br>
+                                    {% endif %}
+
+                                    {% if special_characters_flag %}
+                                        <h2 class="text-center">{{ special_characters_flag }}</h2>
+                                    {% elif api_error %}
+                                        <h2 class="text-center">{{ api_error }}</h2>
+                                    {% elif no_active_api %}
+                                        <h2 class="text-center">{{ no_active_api }}</h2>
+                                    {% elif timeout %}
+                                        <h2 class="text-center">{{ timeout }}</h2>
+                                    {% elif switch_off %}
+                                        <h2 class="text-center">{{ switch_off }}</h2>
+                                    {% else %}
+                                        <h2 class="text-center">{% if invalid_url %}{{ invalid_url }}{% else %}Just get the video URL...{% endif %}</h2>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"> <i class="fa fa-search"></i></span>
+                                            </div>
+                                            <input class="border rounded form-control" type="search" id="search-input" name="search" placeholder="Enter url here..." required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check mt-5">
+                                            <input class="form-check-input" type="radio" id="formCheck-1" name="file-type" value="mp3" required="">
+                                            <label class="form-check-label" for="formCheck-1">Get MP3</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" id="formCheck-5" name="file-type" value="mp4" required="">
+                                            <label class="form-check-label" for="formCheck-1">Get MP4</label>
+                                        </div>
+
+                                        {% if api_error %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="cbox-1" name="force-download">
+                                                <label class="form-check-label" for="cbox-1">Force download if there was an API error.</label>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if permission %}
+                                            {% permission as granted %}
+                                            <!-- Assigning the value of the function permissions to a variable call granted -->
+                                            {% if granted %}
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" id="formCheck-4" name="file-type" value="mp3-playlist" required="">
+                                                    <label class="form-check-label" for="formCheck-1">Get Playlist in MP3</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" id="formCheck-3" name="file-type" value="mp4-playlist" required="">
+                                                    <label class="form-check-label" for="formCheck-1">Get Playlist in MP4</label>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+
+                                    <input type="hidden" name="submission" value="url-form">
+
+                                    <!-- Search Button -->
+                                    <div class="form-group" style="text-align: center;">
+                                        <button class="btn btn-warning btn-lg" data-bs-hover-animate="pulse" id="search-btn" type="submit" onclick="showHide()">Search</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% if result %}
+        <!-- Results Section -->
+        <section class="showcase">
+            <div class="container-fluid p-0">
+                <div class="row register-form">
+                    <div class="col">
+                        <div class="container py-5">
+                            <header class="text-center pt-3 pb-5">
+                                <h1 class="display-4 font-weight-bold">Here are your results</h1>
+                                <p class="font-italic text-muted mb-0">We have got the best quality results for you!</p>
+                            </header>
+
+                            <!-- Result Item Title -->
+                            <div class="py-5">
+                                <div class="row">
+                                    <!-- DEMO 4 Item -->
+                                    <div class="col-lg-5">
+                                        <h3 class="font-weight-bold mb-1">{{ title }}</h3>
+                                        <p class="font-italic text-muted mb-2">Author: {{ author|title }}</p>
+                                        <p class="font-italic text-muted mb-2">Views: {{ views }}</p>
+                                    </div>
+
+                                    <!-- Result Item Card with Download Button -->
+                                    <div class="col-lg-7 mb-3 mb-lg-0">
+                                        <div class="hover hover-4 text-white rounded">
+                                            <img src="{{ thumbnail }}" alt="">
+                                            <div class="hover-overlay"></div>
+                                            <div class="hover-4-content">
+                                                <h3 class="hover-4-title text-uppercase font-weight-bold mb-0">
+                                                    <!-- Download Button -->
+                                                    <div class="col d-flex d-xl-flex justify-content-center justify-content-xl-center" >
+                                                        <!-- Will display audio download link -->
+                                                        {% if audio %}
+                                                            <a class="btn btn-primary pulse animated infinite" role="button" id="button1" type="button" style="background: var(--orange);border-color: var(--dark);margin-top: 0px;width:200px;" href="{{ audio.mp3.url }}" download="{{ title|title }}">
+                                                                <img style="width: 20px;height: 20px;transform: rotate(270deg) translateX(10px) translateY(-85px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">
+                                                                <span data-bs-hover-animate="pulse"><strong>Click here&nbsp;</strong><i class="fas fa-download"></i></span>
+                                                                <img style="width: 20px;height: 20px;transform: rotate(90deg) translateX(-9px) translateY(-65px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">
+                                                            </a>
+                                                        {% endif %}
+
+                                                        <!-- Will display video download link -->
+                                                        {% if video %}
+                                                            <a class="btn btn-primary pulse animated infinite" role="button" id="button1" type="button" style="background: var(--orange);border-color: var(--dark);margin-top: 0px;width:200px;" href="{{ video.mp4.url }}" download="{{ title|title }}">
+                                                                <img style="width: 20px;height: 20px;transform: rotate(270deg) translateX(10px) translateY(-85px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">
+                                                                <span data-bs-hover-animate="pulse"><strong>Click here&nbsp;</strong><i class="fas fa-download"></i></span>
+                                                                <img style="width: 20px;height: 20px;transform: rotate(90deg) translateX(-9px) translateY(-65px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">
+                                                            </a>
+                                                        {% endif %}
+                                                    </div>
+                                                </h3>
+                                                <p class="hover-4-description text-uppercase mb-0 small">Length: {{ length }}</p>
+                                                <p class="hover-4-description text-uppercase mb-0  mt-3 small">Published on: {{ publish_date }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock content %}
