@@ -100,29 +100,35 @@ def home(request):
 
                     if not fox.validate_link():
                         context['invalid_url'] = 'This is not a valid YouTube url... Get a valid url please!'
+                        
                     else:
-                        api_error = fox.download(force_download)
+                        api_error, request_amount = fox.download(force_download)
 
-                        if not api_error:
-                            result, video = fox.get_video()
+                        if request_amount == 20:
+                            context['timeout'] = f'{request_amount} amount of requests has been sent in the ' \
+                                                 f'background and none was successful. The API is down at this time. '
 
-                            if video:
-                                context['video'] = video
-                                context['title'] = fox.video_details['title']
-                                context['thumbnail'] = fox.video_details['thumbnail']
-                                context['author'] = fox.video_details['author']
-                                context['publish_date'] = fox.video_details['publish_date']
-                                context['views'] = fox.video_details['views']
-                                context['length'] = fox.video_details['length']
-
-                                fox.clean_up()
-
-                            else:
-                                context['special_characters_flag'] = 'This video url cannot be converted right now. Please ' \
-                                                                     'try again in 24 hours. You may also try another ' \
-                                                                     'url now. '
                         else:
-                            context['api_error'] = 'There is an API error here! Please retry...'
+                            if not api_error:
+                                result, video = fox.get_video()
+
+                                if video:
+                                    context['video'] = video
+                                    context['title'] = fox.video_details['title']
+                                    context['thumbnail'] = fox.video_details['thumbnail']
+                                    context['author'] = fox.video_details['author']
+                                    context['publish_date'] = fox.video_details['publish_date']
+                                    context['views'] = fox.video_details['views']
+                                    context['length'] = fox.video_details['length']
+
+                                    fox.clean_up()
+
+                                else:
+                                    context['special_characters_flag'] = 'This video url cannot be converted right now. Please ' \
+                                                                         'try again in 24 hours. You may also try another ' \
+                                                                         'url now. '
+                            else:
+                                context['api_error'] = 'There is an API error here! Please retry...'
 
                 elif youtube_dl_api and youtube_dl_api.switch:
                     print('MP4 -> YouTube-DL Work\n')
