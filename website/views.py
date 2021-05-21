@@ -100,7 +100,7 @@ def home(request):
 
                     if not fox.validate_link():
                         context['invalid_url'] = 'This is not a valid YouTube url... Get a valid url please!'
-                        
+
                     else:
                         api_error, request_amount = fox.download(force_download)
 

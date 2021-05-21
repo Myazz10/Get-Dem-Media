@@ -150,7 +150,7 @@
                                                     <div class="col d-flex d-xl-flex justify-content-center justify-content-xl-center" >
                                                         <!-- Will display audio download link -->
                                                         {% if audio %}
-                                                            <a class="btn btn-primary pulse animated infinite" role="button" id="button1" type="button" style="background: var(--orange);border-color: var(--dark);margin-top: 0px;width:200px;" href="{{ audio.mp3.url }}" download="{{ title|title }}">
+                                                            <a class="btn btn-primary pulse animated infinite" role="button" id="button1" type="button" style="background: var(--orange);border-color: var(--dark);margin-top: 0px;width:200px;" href="{{ audio.mp3.url }}" download="{{ title|title }}.mp3">
                                                                 <img style="width: 20px;height: 20px;transform: rotate(270deg) translateX(10px) translateY(-85px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">
                                                                 <span data-bs-hover-animate="pulse"><strong>Click here&nbsp;</strong><i class="fas fa-download"></i></span>
                                                                 <img style="width: 20px;height: 20px;transform: rotate(90deg) translateX(-9px) translateY(-65px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">
@@ -159,7 +159,7 @@
 
                                                         <!-- Will display video download link -->
                                                         {% if video %}
-                                                            <a class="btn btn-primary pulse animated infinite" role="button" id="button1" type="button" style="background: var(--orange);border-color: var(--dark);margin-top: 0px;width:200px;" href="{{ video.mp4.url }}" download="{{ title|title }}">
+                                                            <a class="btn btn-primary pulse animated infinite" role="button" id="button1" type="button" style="background: var(--orange);border-color: var(--dark);margin-top: 0px;width:200px;" href="{{ video.mp4.url }}" download="{{ title|title }}.mp4">
                                                                 <img style="width: 20px;height: 20px;transform: rotate(270deg) translateX(10px) translateY(-85px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">
                                                                 <span data-bs-hover-animate="pulse"><strong>Click here&nbsp;</strong><i class="fas fa-download"></i></span>
                                                                 <img style="width: 20px;height: 20px;transform: rotate(90deg) translateX(-9px) translateY(-65px);" src="{% static 'website/assets/img/arrowwhite.gif' %}">

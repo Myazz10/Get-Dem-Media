@@ -20,7 +20,7 @@ Pillow==8.2.0
 proglog==0.1.9
 psycopg2==2.8.6
 python-decouple==3.4
-pytube==10.8.1
+pytube==10.8.2
 pytz==2021.1
 requests==2.25.1
 six==1.16.0
