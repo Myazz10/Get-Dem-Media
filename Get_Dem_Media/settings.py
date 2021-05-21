@@ -3,6 +3,7 @@ import os
 import django_heroku
 import dj_database_url
 from decouple import config
+import cloudinary_storage
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -35,6 +36,8 @@ INSTALLED_APPS = [
     'website.apps.WebsiteConfig',
     'api.apps.ApiConfig',
     'video_or_audio.apps.VideoOrAudioConfig',
+    'cloudinary_storage',
+    'cloudinary',
     'django_cleanup',
 ]
 
@@ -145,6 +148,15 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_USER')
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 django_heroku.settings(locals())
